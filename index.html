@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAS - Daftar Member Baru</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- html-to-image untuk export member card -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        aasCream: '#F8FAFC',
+                        aasSky: '#38BDF8',
+                        aasIndigo: '#6366F1',
+                        aasAmber: '#F59E0B',
+                        aasGreen: '#10B981',
+                        aasDark: '#0F172A',
+                        aasCardBg: '#EEF2FF',
+                    },
+                    fontFamily: {
+                        heading: ['"Space Grotesk"', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neo': '4px 4px 0px #0F172A',
+                        'neo-lg': '8px 8px 0px #0F172A',
+                        'neo-sm': '2px 2px 0px #0F172A',
+                        'neo-indigo': '4px 4px 0px #6366F1',
+                        'neo-sky': '4px 4px 0px #38BDF8',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: radial-gradient(#0F172A 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .border-b-thick { border-bottom: 3px solid #0F172A; }
+        .border-t-thick { border-top: 3px solid #0F172A; }
+
+        .neo-btn {
+            transition: all 0.15s ease-in-out;
+            box-shadow: 4px 4px 0px #0F172A;
+            border: 2px solid #0F172A;
+        }
+        .neo-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #0F172A;
+        }
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #0F172A;
+        }
+
+        .neo-card {
+            border: 3px solid #0F172A;
+            box-shadow: 6px 6px 0px #0F172A;
+        }
+
+        .neo-input {
+            border: 2px solid #0F172A;
+            box-shadow: 3px 3px 0px #0F172A;
+            transition: all 0.2s ease;
+        }
+        .neo-input:focus {
+            outline: none;
+            box-shadow: 5px 5px 0px #6366F1;
+            transform: translateY(-1px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        .float-badge {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* ===== MEMBER CARD SPECIFIC STYLES ===== */
+        #memberCard {
+            width: 100%;
+            max-width: 440px;
+            box-sizing: border-box;
+            background-color: #F8FAFC;
+            border: 3px solid #0F172A;
+            box-shadow: 6px 6px 0px #0F172A;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #0F172A;
+        }
+        #memberCard .mc-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px dashed #0F172A;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+        }
+        #memberCard .mc-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 24px;
+            margin-bottom: 6px;
+            color: #0F172A;
+        }
+        #memberCard .mc-pill {
+            display: inline-flex;
+            align-items: center;
+            height: 22px;
+            padding: 0 8px;
+            box-sizing: border-box;
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1;
+            border: 1.5px solid #0F172A;
+            border-radius: 6px;
+            color: #0F172A;
+        }
+        #memberCard .mc-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            background-color: #38BDF8;
+            border: 2px solid #0F172A;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #memberCard .mc-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        #memberCard .mc-row .mc-box + .mc-box {
+            margin-left: 10px;
+        }
+        #memberCard .mc-box {
+            background-color: #EEF2FF;
+            padding: 10px 12px;
+            border: 2px solid #0F172A;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        #memberCard .mc-row .mc-box {
+            flex: 1 1 0;
+            min-width: 0;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #memberCard .mc-wide { margin-bottom: 10px; }
+        #memberCard .mc-label {
+            display: block;
+            font-size: 9px;
+            font-weight: 800;
+            line-height: 14px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        #memberCard .mc-value {
+            display: block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 18px;
+            color: #0F172A;
+            word-break: break-word;
+        }
+        #memberCard .mc-value-sm { font-size: 12px; }
+        #memberCard .mc-text {
+            margin: 0;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 16px;
+            color: #0F172A;
+            word-break: break-word;
+        }
+        #memberCard .mc-join {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #38BDF8;
+            padding: 0 12px;
+            height: 36px;
+            box-sizing: border-box;
+            border: 2px solid #0F172A;
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+        #memberCard .mc-join-label {
+            font-size: 9px;
+            font-weight: 800;
+            line-height: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #0F172A;
+        }
+        #memberCard .mc-join-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 16px;
+            color: #0F172A;
+        }
+        #memberCard .mc-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #0F172A;
+            padding-top: 10px;
+        }
+        #memberCard .mc-foot-line {
+            display: block;
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 16px;
+            color: #0F172A;
+        }
+        #memberCard .mc-foot-line span {
+            font-weight: 600;
+            color: #334155;
+        }
+        #memberCard .mc-foot-id {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 14px;
+            color: #64748B;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-aasSky selection:text-aasDark">
+
+    <header class="w-full border-b-thick bg-aasCream sticky top-0 z-50 px-4 py-4 md:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-aasSky neo-card flex items-center justify-center transform -rotate-3">
+                    <i data-lucide="plane-takeoff" class="w-6 h-6 text-aasDark"></i>
+                </div>
+                <div>
+                    <span class="heading-font text-xl md:text-2xl font-bold tracking-tight">ASIA AVIATION <span class="bg-aasIndigo text-white px-1.5 py-0.5 border border-aasDark">SKIES</span></span>
+                    <p class="text-xs font-semibold text-slate-600 hidden sm:block">Komunitas Pecinta Aviasi Indonesia 🇮🇩</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="#register" class="neo-btn bg-aasSky text-aasDark px-4 py-2 text-sm font-bold rounded-lg flex items-center gap-2">
+                    <i data-lucide="id-card" class="w-4 h-4"></i> Daftar Sekarang
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-8 md:py-16 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+
+            <!-- Hero Text Left -->
+            <div class="lg:col-span-8 space-y-6 text-left">
+                <div class="inline-flex items-center gap-2 bg-aasAmber text-aasDark px-3 py-1.5 neo-card text-xs md:text-sm font-bold rounded-md transform -rotate-1">
+                    <i data-lucide="radar" class="w-4 h-4 text-red-600 animate-pulse"></i> AIRLINE SPOTTERS &amp; AVIATION GEEKS
+                </div>
+
+                <h1 class="heading-font text-4xl sm:text-6xl font-extrabold tracking-tight leading-none">
+                    LET`S JOIN THE <span class="bg-aasSky px-2 py-1 border-2 border-aasDark inline-block transform rotate-1 shadow-[4px_4px_0px_#0F172A]">Asia Aviation Skies</span> COMMUNITY.
+                </h1>
+
+                <p class="text-base sm:text-lg font-medium text-slate-800 leading-relaxed max-w-2xl">
+                    Selamat datang di portal pendaftaran resmi <strong class="bg-aasSky px-1">Asia Aviation Skies (AAS)</strong>. Wadah berkumpulnya avgeek, planespotter, dan pencinta dunia penerbangan di seluruh nusantara. Ambil boarding pass digitalmu sekarang!
+                </p>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#register" class="neo-btn bg-aasSky px-6 py-3.5 text-base font-extrabold rounded-xl flex items-center gap-3">
+                        <span>Mulai Pendaftaran</span>
+                        <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                    </a>
+                    <button id="heroWaLockedBtn" onclick="alertLockedWa()" class="neo-btn bg-slate-200 text-slate-700 px-6 py-3.5 text-base font-extrabold rounded-xl flex items-center gap-3 cursor-pointer">
+                        <i data-lucide="message-square" class="w-5 h-5 text-aasGreen"></i> Grup WA <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full uppercase">Terkunci <i data-lucide="lock" class="w-3 h-3 inline"></i></span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-6 pt-4 text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-aasGreen bg-aasDark p-0.5 rounded-full"></i> 100% Gratis Daftar
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-aasGreen bg-aasDark p-0.5 rounded-full"></i> Dapat Member Card
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Graphic Right -->
+            <div class="lg:col-span-4 relative flex justify-center">
+                <div class="absolute -top-6 -left-6 w-24 h-24 bg-aasIndigo rounded-2xl neo-card float-badge items-center justify-center z-10 hidden sm:flex">
+                    <i data-lucide="plane" class="w-10 h-10 text-white"></i>
+                </div>
+                <div class="absolute -bottom-6 -right-6 w-20 h-20 bg-aasSky rounded-full neo-card float-badge items-center justify-center z-10 hidden sm:flex" style="animation-delay: 2s;">
+                    <i data-lucide="radio-tower" class="w-8 h-8 text-aasDark"></i>
+                </div>
+
+                <div class="w-full max-w-sm bg-aasCardBg neo-card p-6 md:p-7 rounded-2xl text-left space-y-3">
+                    <div class="flex items-center gap-3 border-b-2 border-aasDark pb-3">
+                        <div class="w-10 h-10 bg-aasSky neo-card rounded-xl flex items-center justify-center">
+                            <i data-lucide="plane-landing" class="w-6 h-6 text-aasDark"></i>
+                        </div>
+                        <h3 class="heading-font font-extrabold text-lg leading-tight">Kenapa Harus Masuk AAS?</h3>
+                    </div>
+                    <ul class="space-y-2 text-xs md:text-sm font-semibold text-slate-800">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-aasGreen shrink-0 mt-0.5"></i>
+                            <span>Bisa diskusi seputar aviasi</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-aasGreen shrink-0 mt-0.5"></i>
+                            <span>Admin ramah &amp; member baik</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-aasGreen shrink-0 mt-0.5"></i>
+                            <span>Bisa dapet temen sesama avgeek</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-aasGreen shrink-0 mt-0.5"></i>
+                            <span>Anti dikacangin &amp; anti drama</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-aasGreen shrink-0 mt-0.5"></i>
+                            <span>Dapet Member Card</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-aasGreen shrink-0 mt-0.5"></i>
+                            <span>Dapet MBG 🧢🗿</span>
+                        </li>
+                    </ul>
+                    <!-- Dynamic Status Badge -->
+                    <div id="statusBadge" class="bg-aasDark text-white py-2 px-3 rounded-lg font-bold text-xs text-center mt-2 flex items-center justify-center gap-1.5 transition-all duration-300">
+                        <i data-lucide="alert-circle" id="statusIcon" class="w-3.5 h-3.5 text-aasAmber shrink-0"></i>
+                        <span id="statusText">STATUS: WAJIB DAFTAR DULU</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="register" class="max-w-3xl mx-auto bg-white neo-card p-6 md:p-10 rounded-2xl mb-16">
+            <div class="text-center mb-8">
+                <span class="bg-aasSky px-3 py-1 neo-card text-xs font-bold uppercase rounded-md">FORMULIR PENDAFTARAN</span>
+                <h2 class="heading-font text-3xl md:text-4xl font-extrabold mt-3">Join Asia Aviation Skies</h2>
+                <p class="text-slate-600 font-medium text-sm md:text-base mt-1">Lengkapi data diri di bawah ini untuk membuat member card resmi Anda.</p>
+            </div>
+
+            <form id="aasForm" class="space-y-6">
+                <!-- Nama -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="nama">
+                        <i data-lucide="user" class="w-4 h-4 text-aasIndigo inline-block mr-1"></i> Nama / Nama Panggilan <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="nama" required placeholder="Cth: Capt. Rian"
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream">
+                </div>
+
+                <!-- Umur -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="umur">
+                        <i data-lucide="cake" class="w-4 h-4 text-aasSky inline-block mr-1"></i> Umur (Minimal 10 Tahun) <span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" id="umur" min="10" max="100" required placeholder="Cth: 18"
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream">
+                    <p id="ageError" class="text-red-600 text-xs font-bold mt-1 hidden">Maaf, umur minimal untuk bergabung adalah 10 tahun.</p>
+                </div>
+
+                <!-- HUB Bandara -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="hubBandara">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-aasGreen inline-block mr-1"></i> HUB Bandara (Bandara Terdekat) <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="hubBandara" required placeholder="Cth: CGK / Juanda (SUB)"
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream">
+                </div>
+
+                <!-- Tahu AAS Darimana -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="tahuAas">
+                        <i data-lucide="megaphone" class="w-4 h-4 text-aasAmber inline-block mr-1"></i> Darimana Tahu Asia Aviation Skies? <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="tahuAas" required placeholder="Cth: IG / TikTok / Teman"
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream">
+                </div>
+
+                <!-- Alasan Masuk AAS -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="alasanAas">
+                        <i data-lucide="heart" class="w-4 h-4 text-aasIndigo inline-block mr-1"></i> Alasan Pengen Masuk AAS <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="alasanAas" rows="3" required placeholder="Cth: Ingin cari teman sesama avgeek dan diskusi aviasi."
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream"></textarea>
+                </div>
+
+                <!-- Apa yg diketahui tentang aviasi -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="tentangAviasi">
+                        <i data-lucide="book-open" class="w-4 h-4 text-aasSky inline-block mr-1"></i> Apa Yang Lu Tahu Tentang Aviasi? <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="tentangAviasi" rows="3" required placeholder="Cth: Seputar maskapai, armada pesawat, dan operasional bandara."
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream"></textarea>
+                </div>
+
+                <!-- Berapa lama suka aviasi -->
+                <div>
+                    <label class="block heading-font font-bold text-sm mb-2" for="lamaAviasi">
+                        <i data-lucide="clock" class="w-4 h-4 text-aasGreen inline-block mr-1"></i> Sudah Berapa Lama Suka Aviasi? <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="lamaAviasi" required placeholder="Cth: 2 tahun / sejak kecil"
+                        class="w-full px-4 py-3 neo-input rounded-xl font-medium text-base bg-aasCream">
+                </div>
+
+                <!-- Checkbox Persetujuan Peraturan -->
+                <div class="bg-aasCream p-4 neo-card rounded-xl">
+                    <label class="flex items-start gap-3 cursor-pointer select-none">
+                        <input type="checkbox" id="agreeRules" required class="mt-1 w-5 h-5 accent-aasIndigo cursor-pointer rounded">
+                        <span class="text-xs md:text-sm font-bold text-slate-800 leading-snug">
+                            Saya menyetujui semua rules dan tata tertib yang berlaku di <strong class="bg-aasSky px-1">Asia Aviation Skies</strong>. <span class="text-red-500">*</span>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2 text-center">
+                    <button type="submit" class="neo-btn bg-aasSky w-full py-4 text-lg font-extrabold rounded-xl flex items-center justify-center gap-3">
+                        <i data-lucide="ticket" class="w-5 h-5"></i> Generate Member Card Saya!
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <div id="resultModal" class="hidden max-w-2xl mx-auto mb-16 animate-fade-in">
+            <div class="bg-aasIndigo neo-card p-6 md:p-8 rounded-2xl text-center space-y-6">
+                <div class="inline-flex items-center gap-2 bg-aasSky px-4 py-1.5 neo-card text-xs font-extrabold rounded-md text-aasDark">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-aasGreen"></i> PENDAFTARAN BERHASIL!
+                </div>
+
+                <h3 class="heading-font text-2xl md:text-3xl font-extrabold text-white">Selamat! Member Card Anda Telah Terbit.</h3>
+                <p class="text-sm font-bold text-slate-100">Silakan unduh member card di bawah ini. Tombol WhatsApp group kini telah terbuka!</p>
+
+                <!-- MEMBER CARD PREVIEW -->
+                <div class="flex justify-center overflow-x-auto py-2 px-1">
+                    <div id="memberCard">
+
+                        <!-- Header -->
+                        <div class="mc-head">
+                            <div>
+                                <div class="mc-title">ASIA AVIATION SKIES</div>
+                                <div class="mc-pill" style="background-color: #38BDF8;">OFFICIAL MEMBER PASS</div>
+                            </div>
+                            <div class="mc-icon">
+                                <i data-lucide="plane" style="width: 22px; height: 22px; color: #0F172A;"></i>
+                            </div>
+                        </div>
+
+                        <!-- Baris 1: Nama & Umur -->
+                        <div class="mc-row">
+                            <div class="mc-box">
+                                <span class="mc-label">NAMA MEMBER</span>
+                                <strong id="cardNama" class="mc-value">-</strong>
+                            </div>
+                            <div class="mc-box">
+                                <span class="mc-label">UMUR / TAHUN</span>
+                                <strong id="cardUmur" class="mc-value">-</strong>
+                            </div>
+                        </div>
+
+                        <!-- Baris 2: Hub & Favorit -->
+                        <div class="mc-row">
+                            <div class="mc-box">
+                                <span class="mc-label">HUB BANDARA</span>
+                                <strong id="cardHub" class="mc-value mc-value-sm">-</strong>
+                            </div>
+                            <div class="mc-box">
+                                <span class="mc-label">FAVORIT AVIASI</span>
+                                <strong id="cardLama" class="mc-value mc-value-sm">-</strong>
+                            </div>
+                        </div>
+
+                        <div class="mc-box mc-wide">
+                            <span class="mc-label">ALASAN MASUK AAS</span>
+                            <p id="cardAlasan" class="mc-text">-</p>
+                        </div>
+
+                        <div class="mc-box mc-wide">
+                            <span class="mc-label">PENGETAHUAN AVIASI</span>
+                            <p id="cardAviasi" class="mc-text">-</p>
+                        </div>
+
+                        <!-- Join Date -->
+                        <div class="mc-join">
+                            <span class="mc-join-label">JOIN DATE</span>
+                            <strong id="cardJoinDate" class="mc-join-value">-</strong>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="mc-foot">
+                            <div>
+                                <span class="mc-foot-line">SUMBER: <span id="cardSumber">-</span></span>
+                                <span class="mc-foot-id">ID: AAS-2026-VERIFIED</span>
+                            </div>
+                            <div class="mc-pill" style="background-color: #F59E0B; font-size: 9px;">ASIA AVGEEK</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol setelah submit -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-2">
+                    <button id="downloadBtn" class="neo-btn bg-aasSky text-aasDark px-6 py-3.5 text-base font-extrabold rounded-xl flex items-center justify-center gap-2">
+                        <i data-lucide="download" class="w-5 h-5"></i> Download Member Card
+                    </button>
+                    <a id="unlockedWaBtn" href="https://chat.whatsapp.com/KoZyPyuSgGZB6iUOiTPdYP?s=cl&p=a&mlu=4&ilr=4" target="_blank" class="neo-btn bg-aasGreen text-white px-6 py-3.5 text-base font-extrabold rounded-xl flex items-center justify-center gap-2">
+                        <i data-lucide="message-square" class="w-5 h-5"></i> Masuk Grup WhatsApp (Terbuka!)
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full border-t-thick bg-aasCream py-8 px-4 text-center">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="heading-font font-bold">ASIA AVIATION SKIES 2026</span>
+            </div>
+            <p class="text-xs font-bold text-slate-700">
+                Komunitas Pecinta Aviasi Indonesia. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function alertLockedWa() {
+            const existingModal = document.getElementById('customAlertModal');
+            if (existingModal) existingModal.remove();
+
+            const alertDiv = document.createElement('div');
+            alertDiv.id = 'customAlertModal';
+            alertDiv.className = 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in';
+            alertDiv.innerHTML = `
+                <div class="bg-white neo-card p-6 md:p-8 rounded-2xl max-w-md w-full text-center space-y-4">
+                    <div class="w-16 h-16 bg-red-400 neo-card rounded-2xl mx-auto flex items-center justify-center text-2xl text-white">
+                        <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="heading-font font-extrabold text-xl">Akses Grup WhatsApp Dikunci!</h3>
+                    <p class="text-sm font-medium text-slate-700">Anda harus mengisi formulir pendaftaran member baru dan men-generate Member Card Asia Aviation Skies terlebih dahulu sebelum dapat bergabung ke grup WhatsApp.</p>
+                    <div class="pt-2">
+                        <button onclick="document.getElementById('customAlertModal').remove(); document.getElementById('register').scrollIntoView({behavior: 'smooth'});" class="neo-btn bg-aasSky w-full py-3 font-bold rounded-xl flex items-center justify-center gap-2">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i> Isi Formulir Sekarang
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(alertDiv);
+            lucide.createIcons();
+        }
+
+        document.getElementById('aasForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const umur = parseInt(document.getElementById('umur').value);
+            const ageError = document.getElementById('ageError');
+
+            if (isNaN(umur) || umur < 10) {
+                ageError.classList.remove('hidden');
+                document.getElementById('umur').focus();
+                return;
+            } else {
+                ageError.classList.add('hidden');
+            }
+
+            const nama = document.getElementById('nama').value;
+            const hubBandara = document.getElementById('hubBandara').value;
+            const tahuAas = document.getElementById('tahuAas').value;
+            const alasanAas = document.getElementById('alasanAas').value;
+            const tentangAviasi = document.getElementById('tentangAviasi').value;
+            const lamaAviasi = document.getElementById('lamaAviasi').value;
+
+            const today = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const joinDateFormatted = today.toLocaleDateString('id-ID', options);
+
+            // Populate Member Card
+            document.getElementById('cardNama').innerText = nama;
+            document.getElementById('cardUmur').innerText = umur + ' Tahun';
+            document.getElementById('cardHub').innerText = hubBandara;
+            document.getElementById('cardSumber').innerText = tahuAas;
+            document.getElementById('cardAlasan').innerText = alasanAas;
+            document.getElementById('cardAviasi').innerText = tentangAviasi;
+            document.getElementById('cardLama').innerText = lamaAviasi;
+            document.getElementById('cardJoinDate').innerText = joinDateFormatted;
+
+            // Update status badge
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.className = 'bg-aasGreen text-white py-2 px-3 rounded-lg font-bold text-xs text-center mt-2 flex items-center justify-center gap-1.5 transition-all duration-300';
+            statusBadge.innerHTML = `<i data-lucide="check-circle" class="w-3.5 h-3.5 text-white shrink-0"></i> STATUS: KAMU SUDAH TERDAFTAR`;
+
+            // Display result
+            const modal = document.getElementById('resultModal');
+            modal.classList.remove('hidden');
+            modal.scrollIntoView({ behavior: 'smooth' });
+
+            // Unlock hero WhatsApp button
+            const heroWaBtn = document.getElementById('heroWaLockedBtn');
+            if (heroWaBtn) {
+                heroWaBtn.outerHTML = `
+                    <a href="https://chat.whatsapp.com/KoZyPyuSgGZB6iUOiTPdYP?s=cl&p=a&mlu=4&ilr=4" target="_blank" class="neo-btn bg-aasGreen text-white px-6 py-3.5 text-base font-extrabold rounded-xl flex items-center gap-3">
+                        <i data-lucide="message-square" class="w-5 h-5"></i> Gabung Grup WA (Terbuka!)
+                    </a>
+                `;
+            }
+            lucide.createIcons();
+        });
+
+        let fontCssPromise = null;
+        function getEmbeddedFontCss() {
+            if (fontCssPromise) return fontCssPromise;
+
+            fontCssPromise = (async () => {
+                const cssUrl = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap';
+                const css = await (await fetch(cssUrl)).text();
+
+                const blocks = css.split('@font-face').slice(1)
+                    .filter(b => b.includes('U+0000-00FF'));
+
+                const toDataUrl = (blob) => new Promise((resolve, reject) => {
+                    const r = new FileReader();
+                    r.onloadend = () => resolve(r.result);
+                    r.onerror = reject;
+                    r.readAsDataURL(blob);
+                });
+
+                const out = [];
+                for (const block of blocks) {
+                    const match = block.match(/url\((https:[^)]+)\)/);
+                    if (!match) continue;
+                    const blob = await (await fetch(match[1])).blob();
+                    const dataUrl = await toDataUrl(blob);
+                    out.push('@font-face' + block.replace(match[1], dataUrl));
+                }
+                return out.join('\n');
+            })().catch(err => {
+                console.warn('Gagal menyiapkan font, memakai bawaan library:', err);
+                fontCssPromise = null;
+                return undefined;
+            });
+
+            return fontCssPromise;
+        }
+
+        window.addEventListener('load', () => { getEmbeddedFontCss(); });
+
+        document.getElementById('downloadBtn').addEventListener('click', async function () {
+            const cardElement = document.getElementById('memberCard');
+            const btn = this;
+            const defaultLabel = '<i data-lucide="download" class="w-5 h-5 inline-block"></i> Download Member Card';
+
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin inline-block"></i> Menyimpan...';
+            lucide.createIcons();
+
+            try {
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                }
+
+                const fontEmbedCSS = await getEmbeddedFontCss();
+
+                const options = {
+                    pixelRatio: 3,
+                    fontEmbedCSS: fontEmbedCSS,
+                    style: { boxShadow: 'none', margin: '0' }
+                };
+
+                await htmlToImage.toPng(cardElement, options);
+                const dataUrl = await htmlToImage.toPng(cardElement, options);
+
+                const link = document.createElement('a');
+                link.download = 'AAS-Member-Card.png';
+                link.href = dataUrl;
+                link.click();
+
+                btn.innerHTML = '<i data-lucide="check" class="w-5 h-5 inline-block"></i> Berhasil Diunduh!';
+            } catch (err) {
+                console.error(err);
+                btn.innerHTML = '<i data-lucide="alert-triangle" class="w-5 h-5 inline-block"></i> Coba Lagi';
+            }
+
+            lucide.createIcons();
+            btn.disabled = false;
+            setTimeout(function () {
+                btn.innerHTML = defaultLabel;
+                lucide.createIcons();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
